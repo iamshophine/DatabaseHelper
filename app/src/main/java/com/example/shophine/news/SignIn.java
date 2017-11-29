@@ -35,18 +35,23 @@ public class SignIn extends AppCompatActivity {
     public void login(View view) {
         getSignInInput();
         if((emailOK&&passOK)){
-            String flag;
+
+            int flag;
             flag = databaseHelper.validate(emailInput.getText().toString(),passwordInput.getText().toString());
            switch (flag){
-               case "welcome" : {
+               case 1 : {
                    Intent intent = new Intent(this, Test.class);
                    startActivity(intent);
                }
-               case "incorrect password" : {
+               case -1 : {
                    Toast.makeText(this,"Incorrect Password",Toast.LENGTH_LONG).show();
                }
-               case "user not found" : {
+               case 0 : {
                    Toast.makeText(this,"User not registered",Toast.LENGTH_LONG).show();
+               }
+               default:{
+                   Toast.makeText(this,"Fail",Toast.LENGTH_LONG).show();
+
                }
 
             }

@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void insert(User user){
         db=this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        String query="select * from user";
+        String query="select * from users";
         Cursor cursor = db.rawQuery(query,null);
         int count = cursor.getCount();
 
@@ -56,10 +56,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public String validate(String email,String pass){
+    public int validate(String email,String pass){
         db=this.getReadableDatabase();
 
-        String query = "select email,password from user";
+        String query = "select email,password from users";
         Cursor cursor = db.rawQuery(query,null);
         String a,b;
         if(cursor.moveToFirst()){
@@ -68,18 +68,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                    if(a.equals(email)){
                        b=cursor.getString(1);
                        if(b.equals(pass)){
-                           return "welcome";
+                           return 1;
                        }else{
-                           return "incorrect password";
+                           return -1;
                        }
                    }
             }while (cursor.moveToNext());
 
-        }else {
-            return "user not found";
         }
-        return "ok";
+        return 0;
     }
 
+    public int checkUserExist(String email){
+        db=this.getReadableDatabase();
 
+        String query = "select email,password from users";
+        Cursor cursor = db.rawQuery(query,null);
+        String a,b;
+        if(cursor.moveToFirst()) {
+            do {
+                a = cursor.getString(0);
+                if (a.equals(email)) {
+                    return 0;
+                }
+            } while (cursor.moveToNext());
+        }
+
+        return 1;
+    }
 }

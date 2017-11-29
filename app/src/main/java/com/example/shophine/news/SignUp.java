@@ -21,6 +21,7 @@ public class SignUp extends AppCompatActivity {
     boolean male, female, others;
     private boolean nameOk,regNoOk,emailOK,passOk,conPassOk,dobOK,genderOK,mobOK;
     EditText nameInput,  regInput , emailInput, passInput, passConInput, mobInput;
+    int flag;
 
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
@@ -39,6 +40,7 @@ public class SignUp extends AppCompatActivity {
 
     }
     public void submit(View view) {
+
         getInput();
         if(nameOk&&regNoOk&&emailOK&&passOk&&conPassOk&&mobOK&&genderOK) {
 
@@ -46,12 +48,20 @@ public class SignUp extends AppCompatActivity {
             user.setEmail(email);
             user.setPassword(pass);
 
-            databaseHelper.insert(user);
-            Toast.makeText(this,"Registered successfully!",Toast.LENGTH_LONG).show();
+            switch (flag){
+                case 1 : {
+                    databaseHelper.insert(user);
+                    Toast.makeText(this,"Registered successfully!",Toast.LENGTH_LONG).show();
 
+                    Intent intent = new Intent(this,Test.class);
+                    startActivity(intent);
+                }
+                case 0 : {
+                    Toast.makeText(this,"Email already exist!",Toast.LENGTH_LONG).show();
 
-            Intent intent = new Intent(this,Test.class);
-            startActivity(intent);
+                }
+            }
+
         }
         else {
             Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
